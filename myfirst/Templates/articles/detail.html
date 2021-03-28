@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{%  block  title  %}{{articles.article_title}}{%  endblock  %}
+
+{% block content %}
+
+<h2>{{articles.article_title}}</h2>
+<p>{{articles.article_text}}</p>
+<em>{{articles.pub_date}}</em>
+<hr>
+{% if latest_comment_list %}
+    {% for c in latest_comment_list %}
+        <div>
+            <p ><strong>{{c.author_name}}</strong></p>
+            <p>{{c.comment_text}}</p>
+        </div>
+    {% endfor %}
+{% else %}
+<div><p>Коментарии не найдены! Станьте первым ;)</p></div>
+{% endif %}
+
+<span class="step-links"><br>
+
+        {% if latest_comment_list.has_previous %}
+            <a href="?page={{ latest_comment_list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        {% if latest_comment_list %}
+        <span class="current">
+            Page {{ latest_comment_list.number }} of {{ latest_comment_list.paginator.num_pages }}.
+        </span>
+        {% endif %}
+
+        {% if latest_comment_list.has_next %}
+            <a href="?page={{ latest_comment_list.next_page_number }}">next</a>
+        {% endif %}
+</span>
+
+<form action="{% url 'articles:leave_comment' articles.id %}" method="POST">
+    {% csrf_token %}
+
+    <input type="text" required placeholder="Your name" name="name"><br>
+    <textarea name="text" required="" placeholder="Your comment" cols="30" rows="10"></textarea><br>
+
+    <button type="submit">Submit</button>
+
+</form>
+
+
+
+
+{% endblock %}

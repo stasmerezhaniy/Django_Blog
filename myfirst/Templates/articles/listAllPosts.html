@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{%  block  title  %} Последние статьи {%  endblock  %}
+
+{% block content %}
+
+    {% if latest_article_list %}
+
+        {% for a in latest_article_list %}
+            <a href="{% url 'articles:detail' a.id %}">{{a.article_title}}</a><br>
+        {% endfor %}
+
+    {% else %}
+        Cтатьи не найдены )=
+    {% endif %}
+
+
+<span class="step-links"><br>
+
+        {% if latest_article_list.has_previous %}
+            <a href="?page={{ latest_article_list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ latest_article_list.number }} of {{ latest_article_list.paginator.num_pages }}.
+        </span>
+
+        {% if latest_article_list.has_next %}
+            <a href="?page={{ latest_article_list.next_page_number }}">next</a>
+        {% endif %}
+</span>
+
+{% endblock %}
+
